@@ -1,0 +1,20 @@
+services:
+  go_plugin_compile:
+    user: ${UID:-1000}:${GID:-1000}
+    build:
+      context: wrpc
+      dockerfile: ../Dockerfile-go
+      target: golang-base
+    command: >
+      bash -c "
+      mkdir -p lib
+      && cd wrpc
+      && go mod tidy
+      && go build -o ../lib/wrpc.so -buildmode=c-shared ."
+    working_dir: /source
+    environment:
+    - GOFLAGS=-buildvcs=false
+    - HOME=/tmp
+    volumes:
+    - .:/source
+    - ../../../go:/source/go

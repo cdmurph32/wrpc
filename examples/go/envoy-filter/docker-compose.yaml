@@ -1,0 +1,13 @@
+services:
+
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile-envoy
+      target: envoy-go
+      args:
+        ENVOY_VARIANT: contrib-dev
+    ports:
+    - "${PORT_PROXY:-10000}:10000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

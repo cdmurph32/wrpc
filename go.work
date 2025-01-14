@@ -1,6 +1,7 @@
 go 1.22.2
 
 use (
+	./examples/go/envoy-filter/wrpc
 	./examples/go/hello-client
 	./examples/go/hello-server
 	./examples/go/resources-server
