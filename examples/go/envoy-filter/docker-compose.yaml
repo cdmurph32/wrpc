@@ -7,7 +7,24 @@ services:
       target: envoy-go
       args:
         ENVOY_VARIANT: contrib-dev
+    depends_on:
+      helloworld_service:
+        condition: service_healthy
     ports:
     - "${PORT_PROXY:-10000}:10000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+  helloworld_service:
+    build:
+      context: ../../../../../envoy/examples/shared/python
+      target: aiohttp-hello-service
+
+  hello_tcp_server:
+    image: alpine:latest
+    container_name: hello_tcp_server
+    working_dir: /app
+    volumes:
+      - ../../../target/debug:/app
+    command: >
+      /app/hello-tcp-server '0.0.0.0:7761'
